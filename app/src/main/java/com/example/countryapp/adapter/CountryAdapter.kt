@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.countryapp.R
 import com.example.countryapp.models.Country
+import com.example.countryapp.view.MainFragmentDirections
 import kotlinx.android.synthetic.main.item_country_row.view.*
 
 class CountryAdapter(val countryList : ArrayList<Country>) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
@@ -32,6 +34,12 @@ class CountryAdapter(val countryList : ArrayList<Country>) : RecyclerView.Adapte
 
         holder.view.tv_countryName.text = countryList[position].countryName
         holder.view.tv_countryRegion.text = countryList[position].countryRegion
+
+        holder.view.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToDetailFragment()
+            Navigation.findNavController(it).navigate(action)
+        }
+
     }
 
     fun updateCountryList(newCountryList : List<Country>){

@@ -26,11 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detailCountryImage"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:text="Country Name :"
         android:layout_centerHorizontal="true"
-        android:layout_margin="7dp">
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="7dp"
+        android:text="Country Name :"
+        android:textSize="22sp"
+        android:textStyle="bold">
 
     </TextView>
 

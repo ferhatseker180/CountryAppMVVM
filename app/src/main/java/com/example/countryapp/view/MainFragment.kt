@@ -42,16 +42,40 @@ class MainFragment : Fragment() {
         }
 
       */
+        observeLiveData()
 
     }
 
-    fun observeLiveData(){
-        viewModel.countries.observe(this, Observer {countries ->
+  private  fun observeLiveData(){
+        viewModel.countries.observe(viewLifecycleOwner, Observer {countries ->
             countries?.let {
                 recyclerView.visibility = View.VISIBLE
                 countryAdapter.updateCountryList(countries)
             }
         })
+
+        viewModel.countryError.observe(viewLifecycleOwner, Observer {error ->
+            error?.let {
+               if (it){
+                   countryErrorText.visibility = View.VISIBLE
+               } else{
+                   countryErrorText.visibility = View.GONE
+               }
+            }
+        })
+
+        viewModel.countryLoading.observe(viewLifecycleOwner, Observer { loading ->
+            loading?.let {
+                if (it){
+                    countryLoadingProgress.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                    countryErrorText.visibility = View.GONE
+                }else{
+                    countryLoadingProgress.visibility = View.GONE
+                }
+            }
+        })
+
     }
 
 }
