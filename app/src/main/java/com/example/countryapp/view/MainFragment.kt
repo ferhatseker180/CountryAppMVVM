@@ -35,6 +35,16 @@ class MainFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = countryAdapter
 
+        swipeRefreshLayout.setOnRefreshListener {
+            recyclerView.visibility = View.GONE
+            countryErrorText.visibility = View.GONE
+            countryLoadingProgress.visibility = View.VISIBLE
+            viewModel.refreshData()
+
+            swipeRefreshLayout.isRefreshing = false // Kendi progress barımızı kullanmak için ana progressiptal edildi.
+
+        }
+
      /*   detayaGitButton.setOnClickListener {
             val nav1 = MainFragmentDirections.actionMainFragmentToDetailFragment()
             Navigation.findNavController(it).navigate(nav1)
