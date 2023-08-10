@@ -39,7 +39,7 @@ class MainFragment : Fragment() {
             recyclerView.visibility = View.GONE
             countryErrorText.visibility = View.GONE
             countryLoadingProgress.visibility = View.VISIBLE
-            viewModel.refreshData()
+            viewModel.refreshFromAPI()
 
             swipeRefreshLayout.isRefreshing = false // Kendi progress barımızı kullanmak için ana progressiptal edildi.
 

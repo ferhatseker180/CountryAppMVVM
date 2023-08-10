@@ -1,11 +1,13 @@
 package com.example.countryapp.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.countryapp.models.Country
 import com.example.countryapp.service.CountryAPIService
 import com.example.countryapp.service.CountryDatabase
+import com.example.countryapp.util.CustomSharedPreferences
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -17,14 +19,34 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
     private val countryApiService = CountryAPIService()
     private val disposable = CompositeDisposable()
     // Composite Disposible: Hafızayı verimli kullanmayı sağlar. Birden fazla kol başka bir fragmenta vs geçerken arkada kalmadan yok edilir.
-
+    private var customPreferences = CustomSharedPreferences(getApplication())
+    private var refreshTime = 10*60*1000*1000*1000L
+    // Yukarıdaki formülle nanosaniye dönüşümü yapıldı.
     val countries = MutableLiveData<List<Country>>()
     val countryError = MutableLiveData<Boolean>()
     val countryLoading = MutableLiveData<Boolean>()
 
     fun refreshData(){
-        getDataFromAPI()
+
+        val updateTime = customPreferences.getTime()
+        if (updateTime != null && updateTime != 0L && System.nanoTime() - updateTime < refreshTime){
+            getDataFromSQLite()
+        } else {
+            getDataFromAPI()
+
+        }
+
     }
+
+    private fun getDataFromSQLite() {
+        countryLoading.value = true
+        launch {
+            val countries = CountryDatabase(getApplication()).countryDao().getAllCountries()
+            showCountries(countries)
+            Toast.makeText(getApplication(),"Countries From SQLite",Toast.LENGTH_LONG).show()
+        }
+    }
+
 
     private fun getDataFromAPI(){
 
@@ -37,6 +59,7 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
 
                     override fun onSuccess(t: List<Country>) {
                         storeInSQLite(t)
+                        Toast.makeText(getApplication(),"Countries From API",Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(e: Throwable) {
@@ -48,6 +71,10 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
                 })
         )
 
+    }
+
+    fun refreshFromAPI(){
+        getDataFromAPI()
     }
 
     private fun showCountries(countryList : List<Country>){
@@ -71,8 +98,8 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
                 i = i+1
             }
             showCountries(list)
-
         }
+        customPreferences.saveTime(System.nanoTime())
     }
 
 }
