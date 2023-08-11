@@ -102,4 +102,9 @@ class MainFragmentViewModel(application: Application) : BaseViewModel(applicatio
         customPreferences.saveTime(System.nanoTime())
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
+
 }
