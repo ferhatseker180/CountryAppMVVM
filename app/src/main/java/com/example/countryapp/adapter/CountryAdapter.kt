@@ -19,8 +19,6 @@ class CountryAdapter(val countryList : ArrayList<Country>) : RecyclerView.Adapte
 
     class CountryViewHolder(var view : ItemCountryRowBinding) : RecyclerView.ViewHolder(view.root) {
 
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
@@ -39,20 +37,6 @@ class CountryAdapter(val countryList : ArrayList<Country>) : RecyclerView.Adapte
         holder.view.country = countryList[position]
         holder.view.listener = this
 
-        /*
-        holder.view.tv_countryName.text = countryList[position].countryName
-        holder.view.tv_countryRegion.text = countryList[position].countryRegion
-
-        holder.view.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToDetailFragment(countryList[position].uuid)
-            Navigation.findNavController(it).navigate(action)
-        }
-
-        holder.view.countryImageView.downloadFromUrl(countryList[position].flagUrl,
-            placeHolderProgressBar(holder.view.context)
-        )
-
-         */
     }
 
     fun updateCountryList(newCountryList : List<Country>){
